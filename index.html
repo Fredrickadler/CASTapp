@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeshChain Bot</title>
+    <title>MeshChain</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -33,54 +33,37 @@
             overflow-x: hidden;
         }
         
-        .header {
-            background: linear-gradient(135deg, var(--darker), var(--gray));
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
-            position: relative;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(to right, #8a2be2, #da70d6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .header p {
-            margin: 5px 0 0;
-            font-size: 12px;
-            color: #aaa;
-            letter-spacing: 1px;
-        }
-        
         .welcome {
-            padding: 20px;
+            padding: 25px 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: linear-gradient(45deg, var(--primary), #4b0082);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .username {
+            font-weight: 600;
+            font-size: 18px;
         }
         
         .card {
             background-color: var(--gray);
-            border-radius: 12px;
+            border-radius: 16px;
             margin: 15px;
-            padding: 18px;
+            padding: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             border: 1px solid rgba(255,255,255,0.05);
         }
@@ -89,27 +72,29 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         
         .card-title {
             font-size: 14px;
             color: #aaa;
             font-weight: 500;
+            letter-spacing: 0.5px;
         }
         
         .card-value {
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 700;
-            margin: 5px 0;
+            margin: 10px 0;
+            color: var(--primary-light);
         }
         
         .btn {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
             display: inline-flex;
@@ -117,6 +102,9 @@
             gap: 8px;
             transition: all 0.3s ease;
             box-shadow: 0 2px 10px rgba(138, 43, 226, 0.3);
+            width: 100%;
+            justify-content: center;
+            margin-top: 15px;
         }
         
         .btn:hover {
@@ -124,36 +112,40 @@
             box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
         }
         
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--primary);
-            box-shadow: none;
+        .reward-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(74, 20, 140, 0.3));
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-light);
         }
         
-        .highlight-card {
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(74, 20, 140, 0.2));
-            border: 1px solid rgba(138, 43, 226, 0.3);
+        .coming-soon {
             text-align: center;
             padding: 20px;
             margin: 20px 15px;
             border-radius: 12px;
+            background-color: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.1);
         }
         
-        .highlight-title {
+        .coming-soon-title {
             font-weight: 700;
             font-size: 16px;
             margin-bottom: 8px;
-            letter-spacing: 0.5px;
+            color: var(--primary-light);
         }
         
-        .highlight-subtitle {
-            color: var(--primary-light);
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+        .coming-soon-subtitle {
+            color: #777;
+            font-size: 12px;
         }
         
         .nav {
@@ -186,53 +178,34 @@
         .nav-icon {
             font-size: 20px;
             margin-bottom: 4px;
+            color: white;
+            opacity: 0.8;
         }
         
-        .emoji-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-        
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: rgba(0, 200, 83, 0.1);
-            color: #00c853;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
+        .nav-item.active .nav-icon {
+            opacity: 1;
+            color: var(--primary);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>MeshChain Bot</h1>
-            <p>BUILT ON BLOCKCHAIN</p>
-        </div>
-        
         <div class="welcome">
             <div class="avatar">F</div>
             <div>
-                <div style="font-size: 12px; color: #aaa;">Welcome back,</div>
-                <div style="font-weight: 600;">Freehick!</div>
+                <div style="font-size: 14px; color: #aaa;">Welcome</div>
+                <div class="username">Freehick!</div>
             </div>
         </div>
         
         <div class="card">
             <div class="card-header">
                 <div class="card-title">AVAILABLE REWARDS</div>
-                <div class="status-badge">
-                    <i class="fas fa-bolt"></i>
-                    ACTIVE
-                </div>
             </div>
-            <div class="card-value">13 pt</div>
+            <div class="reward-circle">13</div>
             <button class="btn">
-                <i class="fas fa-gift"></i>
-                Claim Now
+                <i class="fas fa-arrow-down"></i>
+                Claim Points
             </button>
         </div>
         
@@ -240,38 +213,35 @@
             <div class="card-header">
                 <div class="card-title">TOTAL EARNINGS</div>
             </div>
-            <div class="card-value">14,148.50 pt</div>
-            <div style="font-size: 12px; color: #aaa; margin-top: 5px;">
+            <div class="card-value">14,148.50</div>
+            <div style="font-size: 12px; color: #aaa; margin-top: 5px; text-align: center;">
                 <i class="fas fa-arrow-up" style="color: #00c853;"></i>
                 12.5% from last month
             </div>
         </div>
         
-        <div class="highlight-card">
-            <div class="highlight-title">MCC TRADING NOW LIVE</div>
-            <div class="highlight-subtitle">
-                <img src="https://em-content.zobj.net/source/microsoft-teams/363/chart-increasing_1f4c8.png" width="20" height="20" alt="Chart">
-                Trade Now
-            </div>
+        <div class="coming-soon">
+            <div class="coming-soon-title">ROADMAP</div>
+            <div class="coming-soon-subtitle">Coming Soon</div>
         </div>
         
         <div style="height: 80px;"></div> <!-- Spacer for navigation -->
         
         <div class="nav">
-            <a href="#" class="nav-item active">
-                <img src="https://em-content.zobj.net/source/microsoft-teams/363/desktop-computer_1f5a5-fe0f.png" width="20" height="20" class="emoji-icon" alt="Node">
+            <a href="#" class="nav-item">
+                <i class="fas fa-server nav-icon"></i>
                 Node
             </a>
             <a href="#" class="nav-item">
-                <img src="https://em-content.zobj.net/source/microsoft-teams/363/money-bag_1f4b0.png" width="20" height="20" class="emoji-icon" alt="Earn">
+                <i class="fas fa-coins nav-icon"></i>
                 Earn
             </a>
-            <a href="#" class="nav-item">
-                <img src="https://em-content.zobj.net/source/microsoft-teams/363/busts-in-silhouette_1f465.png" width="20" height="20" class="emoji-icon" alt="Referrals">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-users nav-icon"></i>
                 Referrals
             </a>
             <a href="#" class="nav-item">
-                <img src="https://em-content.zobj.net/source/microsoft-teams/363/man-technologist_1f468-200d-1f4bb.png" width="20" height="20" class="emoji-icon" alt="Profile">
+                <i class="fas fa-user nav-icon"></i>
                 Profile
             </a>
         </div>
