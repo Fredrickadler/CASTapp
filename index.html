@@ -1,437 +1,353 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeshChain</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #8a2be2;
-            --primary-light: #9d4edd;
-            --dark: #121212;
-            --darker: #0a0a0a;
-            --gray: #1e1e1e;
-            --light: #e0e0e0;
-        }
-        
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--dark);
-            color: var(--light);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 420px;
-            margin: 0 auto;
-            background-color: var(--darker);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        .welcome {
-            padding: 25px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), #4b0082);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 20px;
-            color: white;
-        }
-        
-        .username {
-            font-weight: 600;
-            font-size: 18px;
-        }
-        
-        .section {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .section.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .card {
-            background-color: var(--gray);
-            border-radius: 16px;
-            margin: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .card-title {
-            font-size: 14px;
-            color: #aaa;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-        
-        .card-value {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 10px 0;
-            color: var(--primary-light);
-        }
-        
-        .btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(138, 43, 226, 0.3);
-            width: 100%;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
-        }
-        
-        .reward-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(74, 20, 140, 0.3));
-            border: 2px solid var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-light);
-        }
-        
-        .coming-soon {
-            text-align: center;
-            padding: 20px;
-            margin: 20px 15px;
-            border-radius: 12px;
-            background-color: rgba(255,255,255,0.03);
-            border: 1px dashed rgba(255,255,255,0.1);
-        }
-        
-        .coming-soon-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: var(--primary-light);
-        }
-        
-        .coming-soon-subtitle {
-            color: #777;
-            font-size: 12px;
-        }
-        
-        .nav {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            background-color: var(--darker);
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 420px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            color: #777;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .nav-item.active {
-            color: var(--primary);
-        }
-        
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-            color: white;
-            opacity: 0.8;
-        }
-        
-        .nav-item.active .nav-icon {
-            opacity: 1;
-            color: var(--primary);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .stat-card {
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .stat-value {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 5px 0;
-            color: var(--primary-light);
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #aaa;
-        }
-        
-        .referral-code {
-            background: rgba(138, 43, 226, 0.1);
-            border: 1px dashed var(--primary);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            margin: 20px 0;
-            font-family: monospace;
-            font-size: 18px;
-            letter-spacing: 2px;
-        }
-        
-        .node-image {
-            width: 100%;
-            border-radius: 12px;
-            margin: 15px 0;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .progress-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            width: 65%;
-            border-radius: 3px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="welcome">
-            <div class="avatar">F</div>
-            <div>
-                <div style="font-size: 14px; color: #aaa;">Welcome</div>
-                <div class="username">Freehick!</div>
-            </div>
-        </div>
-        
-        <!-- Node Section -->
-        <div id="node-section" class="section active">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">NODE STATUS</div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGNyeXB0byUyMG5vZGV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" class="node-image" alt="Node">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">24/7</div>
-                        <div class="stat-label">Uptime</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">98%</div>
-                        <div class="stat-label">Efficiency</div>
-                    </div>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
-                <div style="text-align: center; font-size: 12px; color: #aaa;">Current Rewards: 3.42 pt</div>
-                <button class="btn">
-                    <i class="fas fa-server"></i>
-                    Node Dashboard
-                </button>
-            </div>
-        </div>
-        
-        <!-- Earn Section -->
-        <div id="earn-section" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">AVAILABLE REWARDS</div>
-                </div>
-                <div class="reward-circle">13</div>
-                <button class="btn">
-                    <i class="fas fa-arrow-down"></i>
-                    Claim Points
-                </button>
-            </div>
-            
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">TOTAL EARNINGS</div>
-                </div>
-                <div class="card-value">14,148.50</div>
-                <div style="font-size: 12px; color: #aaa; margin-top: 5px; text-align: center;">
-                    <i class="fas fa-arrow-up" style="color: #00c853;"></i>
-                    12.5% from last month
-                </div>
-            </div>
-            
-            <div class="coming-soon">
-                <div class="coming-soon-title">NEW EARNING METHODS</div>
-                <div class="coming-soon-subtitle">Launching Next Month</div>
-            </div>
-        </div>
-        
-        <!-- Referrals Section -->
-        <div id="referrals-section" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">YOUR REFERRALS</div>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">42</div>
-                        <div class="stat-label">Total Referrals</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">1,240</div>
-                        <div class="stat-label">Earned Points</div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin: 20px 0;">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cmVmZXJyYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" style="width: 150px; border-radius: 50%; border: 3px solid var(--primary);">
-                </div>
-                <div class="referral-code">
-                    FREEHICK-2023
-                </div>
-                <button class="btn">
-                    <i class="fas fa-share-alt"></i>
-                    Share Referral Link
-                </button>
-            </div>
-        </div>
-        
-        <!-- Profile Section -->
-        <div id="profile-section" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">YOUR PROFILE</div>
-                </div>
-                <div style="text-align: center;">
-                    <div class="avatar" style="width: 80px; height: 80px; font-size: 30px; margin: 0 auto 15px;">F</div>
-                    <div class="username" style="font-size: 22px;">Freehick!</div>
-                    <div style="color: #aaa; margin-bottom: 20px;">Member since 2022</div>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value">Gold</div>
-                        <div class="stat-label">Tier</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">#124</div>
-                        <div class="stat-label">Rank</div>
-                    </div>
-                </div>
-                <button class="btn" style="margin-top: 10px;">
-                    <i class="fas fa-cog"></i>
-                    Account Settings
-                </button>
-                <button class="btn" style="background: transparent; border: 1px solid var(--primary); margin-top: 10px;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Sign Out
-                </button>
-            </div>
-        </div>
-        
-        <div style="height: 80px;"></div> <!-- Spacer for navigation -->
-        
-        <div class="nav">
-            <div class="nav-item active" onclick="showSection('node-section')">
-                <i class="fas fa-server nav-icon"></i>
-                Node
-            </div>
-            <div class="nav-item" onclick="showSection('earn-section')">
-                <i class="fas fa-coins nav-icon"></i>
-                Earn
-            </div>
-            <div class="nav-item" onclick="showSection('referrals-section')">
-                <i class="fas fa-users nav-icon"></i>
-                Referrals
-            </div>
-            <div class="nav-item" onclick="showSection('profile-section')">
-                <i class="fas fa-user nav-icon"></i>
-                Profile
-            </div>
-        </div>
-    </div>
+import logging
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext, MessageHandler, Filters
+import datetime
+import json
+import os
+from uuid import uuid4
 
-    <script>
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Update active nav item
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            event.currentTarget.classList.add('active');
+# Enable logging
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+# Bot configuration
+TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+ADMIN_TASK_CODE = "Fredrick"  # Hidden admin code for adding tasks
+
+# Data storage
+USER_DATA_FILE = "user_data.json"
+TASKS_FILE = "tasks.json"
+
+# Load user data from file
+def load_user_data():
+    if os.path.exists(USER_DATA_FILE):
+        with open(USER_DATA_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+# Save user data to file
+def save_user_data(data):
+    with open(USER_DATA_FILE, "w") as f:
+        json.dump(data, f)
+
+# Load tasks from file
+def load_tasks():
+    if os.path.exists(TASKS_FILE):
+        with open(TASKS_FILE, "r") as f:
+            return json.load(f)
+    return {
+        "tasks": [
+            {"id": "1", "type": "follow", "title": "Follow our Twitter", "points": 50, "completed_by": []},
+            {"id": "2", "type": "like", "title": "Like our tweet", "points": 30, "completed_by": []},
+            {"id": "3", "type": "retweet", "title": "Retweet our tweet", "points": 40, "completed_by": []}
+        ]
+    }
+
+# Save tasks to file
+def save_tasks(tasks):
+    with open(TASKS_FILE, "w") as f:
+        json.dump(tasks, f)
+
+# Initialize data
+user_data = load_user_data()
+tasks_data = load_tasks()
+
+# Main menu keyboard
+def main_menu_keyboard():
+    keyboard = [
+        [InlineKeyboardButton("🏠 Home", callback_data='home')],
+        [InlineKeyboardButton("📋 Tasks", callback_data='tasks')],
+        [InlineKeyboardButton("👤 Profile", callback_data='profile')]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
+# Home screen
+def home_screen(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = str(query.from_user.id)
+    
+    if user_id not in user_data:
+        user_data[user_id] = {
+            "points": 0,
+            "last_claim": None,
+            "username": query.from_user.username,
+            "first_name": query.from_user.first_name,
+            "last_name": query.from_user.last_name,
+            "completed_tasks": []
         }
-    </script>
-</body>
-</html>
+        save_user_data(user_data)
+    
+    user = user_data[user_id]
+    can_claim = True
+    claim_text = "🟢 Claim Now (11 points)"
+    
+    if user["last_claim"]:
+        last_claim = datetime.datetime.fromisoformat(user["last_claim"])
+        next_claim = last_claim + datetime.timedelta(hours=6)
+        if datetime.datetime.now() < next_claim:
+            can_claim = False
+            time_left = next_claim - datetime.datetime.now()
+            hours = time_left.seconds // 3600
+            minutes = (time_left.seconds % 3600) // 60
+            claim_text = f"🔴 Next claim in {hours}h {minutes}m"
+    
+    keyboard = [
+        [InlineKeyboardButton(claim_text, callback_data='claim' if can_claim else 'cant_claim')],
+        [InlineKeyboardButton("📋 Tasks", callback_data='tasks')],
+        [InlineKeyboardButton("👤 Profile", callback_data='profile')]
+    ]
+    
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    query.edit_message_text(
+        text=f"🏠 *Home*\n\nYour points: *{user['points']}*",
+        reply_markup=reply_markup,
+        parse_mode='Markdown'
+    )
+
+# Claim points
+def claim_points(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = str(query.from_user.id)
+    
+    if user_id not in user_data:
+        user_data[user_id] = {
+            "points": 0,
+            "last_claim": None,
+            "username": query.from_user.username,
+            "first_name": query.from_user.first_name,
+            "last_name": query.from_user.last_name,
+            "completed_tasks": []
+        }
+    
+    user = user_data[user_id]
+    
+    if user["last_claim"]:
+        last_claim = datetime.datetime.fromisoformat(user["last_claim"])
+        next_claim = last_claim + datetime.timedelta(hours=6)
+        if datetime.datetime.now() < next_claim:
+            query.answer("You can claim again in " + str(next_claim - datetime.datetime.now()).split(".")[0], show_alert=True)
+            return
+    
+    user["points"] += 11
+    user["last_claim"] = datetime.datetime.now().isoformat()
+    save_user_data(user_data)
+    
+    query.answer("You claimed 11 points!", show_alert=True)
+    home_screen(update, context)
+
+# Tasks screen
+def tasks_screen(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = str(query.from_user.id)
+    
+    if user_id not in user_data:
+        user_data[user_id] = {
+            "points": 0,
+            "last_claim": None,
+            "username": query.from_user.username,
+            "first_name": query.from_user.first_name,
+            "last_name": query.from_user.last_name,
+            "completed_tasks": []
+        }
+        save_user_data(user_data)
+    
+    user = user_data[user_id]
+    tasks = tasks_data["tasks"]
+    
+    task_buttons = []
+    for task in tasks:
+        if task["id"] in user["completed_tasks"]:
+            task_buttons.append([InlineKeyboardButton(f"✅ {task['title']} (+{task['points']})", callback_data=f'task_completed_{task["id"]}')])
+        else:
+            task_buttons.append([InlineKeyboardButton(f"{task['title']} (+{task['points']})", callback_data=f'task_{task["id"]}')])
+    
+    keyboard = task_buttons + [
+        [InlineKeyboardButton("🏠 Home", callback_data='home')],
+        [InlineKeyboardButton("👤 Profile", callback_data='profile')]
+    ]
+    
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    query.edit_message_text(
+        text="📋 *Tasks*\n\nComplete tasks to earn more points:",
+        reply_markup=reply_markup,
+        parse_mode='Markdown'
+    )
+
+# Complete task
+def complete_task(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = str(query.from_user.id)
+    task_id = query.data.split('_')[1]
+    
+    if user_id not in user_data:
+        user_data[user_id] = {
+            "points": 0,
+            "last_claim": None,
+            "username": query.from_user.username,
+            "first_name": query.from_user.first_name,
+            "last_name": query.from_user.last_name,
+            "completed_tasks": []
+        }
+    
+    user = user_data[user_id]
+    
+    if task_id in user["completed_tasks"]:
+        query.answer("You've already completed this task!", show_alert=True)
+        return
+    
+    task = next((t for t in tasks_data["tasks"] if t["id"] == task_id), None)
+    if not task:
+        query.answer("Task not found!", show_alert=True)
+        return
+    
+    user["points"] += task["points"]
+    user["completed_tasks"].append(task_id)
+    task["completed_by"].append(user_id)
+    
+    save_user_data(user_data)
+    save_tasks(tasks_data)
+    
+    query.answer(f"You earned {task['points']} points!", show_alert=True)
+    tasks_screen(update, context)
+
+# Profile screen
+def profile_screen(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = str(query.from_user.id)
+    
+    if user_id not in user_data:
+        user_data[user_id] = {
+            "points": 0,
+            "last_claim": None,
+            "username": query.from_user.username,
+            "first_name": query.from_user.first_name,
+            "last_name": query.from_user.last_name,
+            "completed_tasks": []
+        }
+        save_user_data(user_data)
+    
+    user = user_data[user_id]
+    
+    # Calculate rank (simple implementation)
+    all_users = sorted(user_data.items(), key=lambda x: x[1]["points"], reverse=True)
+    rank = next((i+1 for i, (uid, _) in enumerate(all_users) if uid == user_id, len(all_users)+1)
+    
+    keyboard = [
+        [InlineKeyboardButton("🔗 Share Profile", switch_inline_query=f"Check out my airdrop profile! I have {user['points']} points!")],
+        [InlineKeyboardButton("🏠 Home", callback_data='home')],
+        [InlineKeyboardButton("📋 Tasks", callback_data='tasks')]
+    ]
+    
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    profile_pic = "https://via.placeholder.com/150/7289da/FFFFFF?text=Profile"  # Default profile image
+    
+    query.edit_message_text(
+        text=f"👤 *Profile*\n\n"
+             f"🆔: @{user['username'] or 'N/A'}\n"
+             f"👤: {user['first_name']} {user.get('last_name', '')}\n"
+             f"🏆 Rank: #{rank}\n"
+             f"⭐ Points: {user['points']}\n"
+             f"✅ Completed tasks: {len(user['completed_tasks'])}",
+        reply_markup=reply_markup,
+        parse_mode='Markdown'
+    )
+
+# Add task (admin only)
+def add_task(update: Update, context: CallbackContext):
+    if not context.args:
+        update.message.reply_text("Usage: /addtask <code> <type> <title> <points>")
+        return
+    
+    if len(context.args) < 4:
+        update.message.reply_text("Usage: /addtask <code> <type> <title> <points>")
+        return
+    
+    code = context.args[0]
+    if code != ADMIN_TASK_CODE:
+        update.message.reply_text("Invalid code!")
+        return
+    
+    task_type = context.args[1]
+    title = " ".join(context.args[2:-1])
+    points = context.args[-1]
+    
+    if not points.isdigit():
+        update.message.reply_text("Points must be a number!")
+        return
+    
+    new_task = {
+        "id": str(uuid4()),
+        "type": task_type,
+        "title": title,
+        "points": int(points),
+        "completed_by": []
+    }
+    
+    tasks_data["tasks"].append(new_task)
+    save_tasks(tasks_data)
+    
+    update.message.reply_text(f"New task added: {title} (+{points} points)")
+
+# Start command
+def start(update: Update, context: CallbackContext):
+    update.message.reply_text(
+        "🚀 Welcome to the Airdrop Bot!\n\n"
+        "Earn points by completing tasks and claiming rewards. "
+        "Use the menu below to navigate:",
+        reply_markup=main_menu_keyboard()
+    )
+
+# Button handler
+def button(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+    
+    if query.data == 'home':
+        home_screen(update, context)
+    elif query.data == 'tasks':
+        tasks_screen(update, context)
+    elif query.data == 'profile':
+        profile_screen(update, context)
+    elif query.data == 'claim':
+        claim_points(update, context)
+    elif query.data.startswith('task_') and not query.data.startswith('task_completed_'):
+        complete_task(update, context)
+    elif query.data == 'cant_claim':
+        query.answer("You can't claim yet!", show_alert=True)
+
+# Error handler
+def error(update: Update, context: CallbackContext):
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+def main():
+    # Create the Updater and pass it your bot's token.
+    updater = Updater(TOKEN)
+
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
+
+    # Add command handlers
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("addtask", add_task))
+    
+    # Add callback query handler
+    dp.add_handler(CallbackQueryHandler(button))
+
+    # Add error handler
+    dp.add_error_handler(error)
+
+    # Start the Bot
+    updater.start_polling()
+
+    # Run the bot until you press Ctrl-C or the process receives SIGINT,
+    # SIGTERM or SIGABRT. This should be used most of the time, since
+    # start_polling() is non-blocking and will stop the bot gracefully.
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
