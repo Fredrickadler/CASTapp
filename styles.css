@@ -1,0 +1,175 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  min-height: 100vh;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  background-color: #6200ee;
+  border-radius: 5px;
+}
+
+nav ul li {
+  padding: 15px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.page {
+  padding: 20px;
+}
+
+.claim-section {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.claim-button-container {
+  margin: 20px 0;
+}
+
+.claim-button {
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.claim-button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.claim-button.disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.next-claim-time {
+  color: #666;
+  font-size: 14px;
+}
+
+.points-display {
+  margin-top: 20px;
+}
+
+.points-value {
+  font-size: 36px;
+  font-weight: bold;
+  color: #6200ee;
+}
+
+.tasks-list {
+  margin-top: 20px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.task-item input {
+  margin-right: 10px;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.task-completed {
+  margin-left: 10px;
+  color: #4caf50;
+}
+
+.add-task-section {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.add-task-section input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.add-task-section button {
+  padding: 10px 20px;
+  background-color: #6200ee;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profile-card {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #6200ee;
+}
+
+.profile-info {
+  margin-top: 20px;
+}
+
+.rank-gold {
+  color: gold;
+  font-weight: bold;
+}
+
+.rank-silver {
+  color: silver;
+  font-weight: bold;
+}
+
+.rank-bronze {
+  color: #cd7f32;
+  font-weight: bold;
+}
+
+.share-section {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.share-button {
+  padding: 10px 20px;
+  background-color: #6200ee;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
