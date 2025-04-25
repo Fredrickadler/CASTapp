@@ -1,133 +1,279 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MeshChain Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #8a2be2;
+            --primary-light: #9d4edd;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --gray: #1e1e1e;
+            --light: #e0e0e0;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
             margin: 0;
             padding: 0;
-            color: #333;
+            line-height: 1.6;
         }
+        
         .container {
-            max-width: 400px;
+            max-width: 420px;
             margin: 0 auto;
-            background-color: white;
+            background-color: var(--darker);
             min-height: 100vh;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow-x: hidden;
         }
+        
         .header {
-            background-color: #6200ee;
-            color: white;
-            padding: 15px;
+            background: linear-gradient(135deg, var(--darker), var(--gray));
+            padding: 20px;
             text-align: center;
-            font-size: 18px;
-            font-weight: bold;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+            position: relative;
         }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, #8a2be2, #da70d6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+        
         .welcome {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .section {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        .section-title {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-        .section-value {
-            font-size: 18px;
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), #4b0082);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
         }
-        .reward-status {
+        
+        .card {
+            background-color: var(--gray);
+            border-radius: 12px;
+            margin: 15px;
+            padding: 18px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .card-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
-        .claim-btn {
-            background-color: #6200ee;
+        
+        .card-title {
+            font-size: 14px;
+            color: #aaa;
+            font-weight: 500;
+        }
+        
+        .card-value {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(138, 43, 226, 0.3);
         }
-        .highlight {
-            background-color: #f0e6ff;
-            padding: 15px;
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            box-shadow: none;
+        }
+        
+        .highlight-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(74, 20, 140, 0.2));
+            border: 1px solid rgba(138, 43, 226, 0.3);
             text-align: center;
-            margin: 15px;
-            border-radius: 10px;
-            font-weight: bold;
+            padding: 20px;
+            margin: 20px 15px;
+            border-radius: 12px;
         }
+        
+        .highlight-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .highlight-subtitle {
+            color: var(--primary-light);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
         .nav {
             display: flex;
             justify-content: space-around;
             padding: 15px 0;
-            background-color: white;
+            background-color: var(--darker);
             position: fixed;
             bottom: 0;
             width: 100%;
-            max-width: 400px;
-            border-top: 1px solid #eee;
+            max-width: 420px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
         }
+        
         .nav-item {
-            text-align: center;
-            font-size: 12px;
-            color: #666;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #777;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
+        
         .nav-item.active {
-            color: #6200ee;
-            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .emoji-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(0, 200, 83, 0.1);
+            color: #00c853;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            MeshChain Bot
-            <div style="font-size: 12px;">مبنی برنامه</div>
+            <h1>MeshChain Bot</h1>
+            <p>BUILT ON BLOCKCHAIN</p>
         </div>
         
         <div class="welcome">
-            Hello, Freehick!
-        </div>
-        
-        <div class="section">
-            <div class="section-title">13 pt</div>
-            <div class="reward-status">
-                <div>Claim</div>
-                <button class="claim-btn">دریافت</button>
+            <div class="avatar">F</div>
+            <div>
+                <div style="font-size: 12px; color: #aaa;">Welcome back,</div>
+                <div style="font-weight: 600;">Freehick!</div>
             </div>
         </div>
         
-        <div class="section">
-            <div class="section-title">Reward</div>
-            <div>Status</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">AVAILABLE REWARDS</div>
+                <div class="status-badge">
+                    <i class="fas fa-bolt"></i>
+                    ACTIVE
+                </div>
+            </div>
+            <div class="card-value">13 pt</div>
+            <button class="btn">
+                <i class="fas fa-gift"></i>
+                Claim Now
+            </button>
         </div>
         
-        <div class="section">
-            <div class="section-title">14,148.50 pt</div>
-            <div>Total Rewards</div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">TOTAL EARNINGS</div>
+            </div>
+            <div class="card-value">14,148.50 pt</div>
+            <div style="font-size: 12px; color: #aaa; margin-top: 5px;">
+                <i class="fas fa-arrow-up" style="color: #00c853;"></i>
+                12.5% from last month
+            </div>
         </div>
         
-        <div class="highlight">
-            MCC TRADING NOW LIVE<br>
-            <span style="color: #6200ee;">Trade Now</span>
+        <div class="highlight-card">
+            <div class="highlight-title">MCC TRADING NOW LIVE</div>
+            <div class="highlight-subtitle">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/chart-increasing_1f4c8.png" width="20" height="20" alt="Chart">
+                Trade Now
+            </div>
         </div>
         
-        <div style="height: 60px;"></div> <!-- Spacer for navigation -->
+        <div style="height: 80px;"></div> <!-- Spacer for navigation -->
         
         <div class="nav">
-            <div class="nav-item active">Node</div>
-            <div class="nav-item">Earn</div>
-            <div class="nav-item">Referrals</div>
-            <div class="nav-item">Profile</div>
+            <a href="#" class="nav-item active">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/desktop-computer_1f5a5-fe0f.png" width="20" height="20" class="emoji-icon" alt="Node">
+                Node
+            </a>
+            <a href="#" class="nav-item">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/money-bag_1f4b0.png" width="20" height="20" class="emoji-icon" alt="Earn">
+                Earn
+            </a>
+            <a href="#" class="nav-item">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/busts-in-silhouette_1f465.png" width="20" height="20" class="emoji-icon" alt="Referrals">
+                Referrals
+            </a>
+            <a href="#" class="nav-item">
+                <img src="https://em-content.zobj.net/source/microsoft-teams/363/man-technologist_1f468-200d-1f4bb.png" width="20" height="20" class="emoji-icon" alt="Profile">
+                Profile
+            </a>
         </div>
     </div>
 </body>
